@@ -1,6 +1,6 @@
 # set working directory
 
-setwd("C:/Users/linni/OneDrive/Desktop/Personal/Practice_Programming/Python_Practice_Stats")
+setwd("C:/Users/linni/OneDrive/Desktop/Personal/Practice_Programming/Slay-Ups-Stats")
 
 # read data
 data = read.csv("Data/BBALL_STATS.csv")
