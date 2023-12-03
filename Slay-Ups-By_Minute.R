@@ -1,5 +1,4 @@
 # set working directory
-
 setwd("C:/Users/linni/OneDrive/Desktop/Personal/Practice_Programming/Slay-Ups-Stats")
 
 # read data
@@ -14,61 +13,125 @@ offense = c(game1_off, game2_off, game3_off, game4_off, game5_off, game6_off,
             game23_off, game24_off, game25_off,game26_off, game27_off)
 
 # defense
-defense = c(game1_off, game2_off, game3_off, game4_off, game5_off, game6_off,
-            game7_off, game8_off, game9_off, game10_off, game11_off, game12_off,
-            game13_off, game14_off, game15_off, game16_off, game17_off,
-            game18_off, game19_off, game20_off, game21_off, game22_off,
-            game23_off, game24_off, game25_off,game26_off, game27_off)
+defense = c(game1_def, game2_def, game3_def, game4_def, game5_def, game6_def,
+            game7_def, game8_def, game9_def, game10_def, game11_def, game12_def,
+            game13_def, game14_def, game15_def, game16_def, game17_def,
+            game18_def, game19_def, game20_def, game21_def, game22_def,
+            game23_def, game24_def, game25_def,game26_def, game27_def)
 
 # plus-minus
 pm = offense - defense
 
+# data columns - ADD NEW COLUMNS WHEN NEW DATA AVAILABLE
+off_columns = c(2,4,6,8,10)
+def_columns = c(3,5,7,9,11)
+
+################################################################################
+#                             Team Output by Minute                            #
+################################################################################
+
+# by minute offense
+plot(minute, na.omit(offense[1:40]))
+for (i in 2:length(off_columns)){
+  points(minute, na.omit(offense[(40*i - 39):(40*i)]))}
+
+# by minute defense
+plot(minute, na.omit(defense[1:40]))
+for (i in 2:length(def_columns)){
+  points(minute, na.omit(defense[(40*i - 39):(40*i)]))}
+
+# by minute plus-minus
+plot(minute, na.omit(pm[1:40]))
+for (i in 2:length(off_columns)){
+  points(minute, na.omit(pm[(40*i - 39):(40*i)]))}
+
+## Averages ##
+mean_off_minute = rep(0,40)
+
+for (j in 1:40){
+    minute_subset = subset(data2, minute == j)
+    mean_off_minute[j] = mean(colSums(minute_subset[,off_columns]))
+}
+
+mean_def_minute = rep(0,40)
+
+for (k in 1:40){
+  minute_subset = subset(data2, minute == k)
+  mean_def_minute[k] = mean(colSums(minute_subset[,def_columns]))
+}
+
+mean_pm_minute = rep(0,40)
+
+for (l in 1:40){
+  minute_subset = subset(data2, minute == l)
+  mean_pm_minute[l] = mean(colSums(minute_subset[,off_columns])) - mean(colSums(minute_subset[,def_columns]))
+}
+
+# plots
+plot(minute, mean_off_minute, col = "green", pch = 3, type = 'b', ylim = c(-2.5, 3.5),
+     ylab = "Average Points", xlab = "Minute")
+points(minute, mean_def_minute, col = "red", pch = 4)
+points(minute, mean_pm_minute, col = "yellow", pch = 1)
+lines(minute, mean_def_minute, col = "red")
+lines(minute, mean_pm_minute, col = "yellow")
+legend(-1, 4, c("Points for", "Points against", "Plus-minus"),
+       col = c("green", "red", "yellow"), pch = c(3,4,1), cex = 1, bty = 'n',
+       x.intersp = 0.4, y.intersp = 0.4)
+
+barplot(mean_pm_minute, names.arg = c('1','2','3','4','5','6','7','8','9','10',
+        '11','12','13','14','15','16','17','18','19','20','21','22','23','24','25',
+        '26', '27','28','29','30','31','32','33','34','35','36','37','38','39','40'),
+        main = "Average Plus-Minus by Minute", axis.lty = 1, ylim = c(-2.5,2.5),
+        ylab = "Average Points", xlab = "Minute")
+
+################################################################################
+#                               Output by person                               #
+################################################################################
+
 # set up each person's minutes
-Archer = subset(data2, minute <= 4|(10 < minute & minute <= 28)|minute > 34)
-Dan = subset(data2, minute <= 4|(10 < minute & minute <= 28)|minute > 34)
-Booker = subset(data2, (4 < minute & minute <= 16)|minute > 22)
+Archer = subset(data2, minute <= 4|(10 < minute & minute <= 28)|34 < minute)
+Dan = subset(data2, minute <= 4|(10 < minute & minute <= 28)|34 < minute)
+Booker = subset(data2, (4 < minute & minute <= 16)|22 < minute)
 Chapman = subset(data2, minute <= 16|(22 < minute & minute <= 34))
-Anton = subset(data2, minute <= 10|(16 < minute & minute <= 22)|minute > 28)
-Joseph = subset(data2, (4 < minute & minute <= 22)|minute > 28)
-Mitch = subset(data2, minute < 10|(16 < minute & minute <= 34))
+Anton = subset(data2, minute <= 10|(16 < minute & minute <= 22)|28 < minute)
+Joseph = subset(data2, (4 < minute & minute <= 22)|28 < minute)
+Mitch = subset(data2, minute <= 10|(16 < minute & minute <= 34))
 
 ################################################################################
 #                         Offensive Output by person                           #
 ################################################################################
 
-## NOTE: MUST ADD COLUMNS IN COLSUMS WHEN NEW DATA AVAILABLE (for all calcs) ##
-
 # mean offensive output
-Archer_off = mean(colSums(Archer[,c(2,4,6,8,10)], na.rm = TRUE))
-Dan_off = mean(colSums(Dan[,c(2,4,6,8,10)], na.rm = TRUE))
-Booker_off = mean(colSums(Booker[,c(2,4,6,8,10)], na.rm = TRUE))
-Chapman_off = mean(colSums(Chapman[,c(2,4,6,8,10)], na.rm = TRUE))
-Anton_off = mean(colSums(Anton[,c(2,4,6,8,10)], na.rm = TRUE))
-Joseph_off = mean(colSums(Joseph[,c(2,4,6,8,10)], na.rm = TRUE))
-Mitch_off = mean(colSums(Mitch[,c(2,4,6,8,10)], na.rm = TRUE))
+Archer_off = mean(colSums(Archer[,off_columns], na.rm = TRUE))
+Dan_off = mean(colSums(Dan[,off_columns], na.rm = TRUE))
+Booker_off = mean(colSums(Booker[,off_columns], na.rm = TRUE))
+Chapman_off = mean(colSums(Chapman[,off_columns], na.rm = TRUE))
+Anton_off = mean(colSums(Anton[,off_columns], na.rm = TRUE))
+Joseph_off = mean(colSums(Joseph[,off_columns], na.rm = TRUE))
+Mitch_off = mean(colSums(Mitch[,off_columns], na.rm = TRUE))
 
 barplot(c(Archer_off, Dan_off, Booker_off, Chapman_off, Anton_off, Joseph_off, Mitch_off),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
         "Mitch"), col = c("red", "red", "lightgreen", "yellow","lightgreen","green",
-        "lightyellow"), main = "Offense by Person")
+        "lightgreen"), main = "Offense by Person", ylab = "Points", xlab = "Person")
 
 ################################################################################
 #                         Defensive Output by person                           #
 ################################################################################
 
 # mean defensive output
-Archer_def = mean(colSums(Archer[,c(3,5,7,9,11)], na.rm = TRUE))
-Dan_def = mean(colSums(Dan[,c(3,5,7,9,11)], na.rm = TRUE))
-Booker_def = mean(colSums(Booker[,c(3,5,7,9,11)], na.rm = TRUE))
-Chapman_def = mean(colSums(Chapman[,c(3,5,7,9,11)], na.rm = TRUE))
-Anton_def = mean(colSums(Anton[,c(3,5,7,9,11)], na.rm = TRUE))
-Joseph_def = mean(colSums(Joseph[,c(3,5,7,9,11)], na.rm = TRUE))
-Mitch_def = mean(colSums(Mitch[,c(3,5,7,9,11)], na.rm = TRUE))
+Archer_def = mean(colSums(Archer[,def_columns], na.rm = TRUE))
+Dan_def = mean(colSums(Dan[,def_columns], na.rm = TRUE))
+Booker_def = mean(colSums(Booker[,def_columns], na.rm = TRUE))
+Chapman_def = mean(colSums(Chapman[,def_columns], na.rm = TRUE))
+Anton_def = mean(colSums(Anton[,def_columns], na.rm = TRUE))
+Joseph_def = mean(colSums(Joseph[,def_columns], na.rm = TRUE))
+Mitch_def = mean(colSums(Mitch[,def_columns], na.rm = TRUE))
 
 barplot(c(Archer_def,Dan_def, Booker_def, Chapman_def, Anton_def, Joseph_def, Mitch_def),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
         "Mitch"), col = c("green", "green", "red", "lightyellow", "lightyellow",
-        "yellow", "lightgreen"), main = "Defense by Person")
+        "yellow", "yellow"), main = "Defense by Person", ylab = "Points", xlab = "Person")
 
 ################################################################################
 #                         Plus-Minus Output by person                          #
@@ -86,7 +149,7 @@ Mitch_pm = Mitch_off - Mitch_def
 barplot(c(Archer_pm, Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm, Mitch_pm),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
         "Mitch"), col = c("red", "red", "yellow", "yellow","lightgreen","green",
-        "lightgreen"), main = "Plus-Minus by Person")
+        "lightyellow"), main = "Plus-Minus by Person", ylab = "Points", xlab = "Person")
 
 
 plot(c(1,2,3,4,5,6,7), c(Archer_pm,Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm,
@@ -108,36 +171,36 @@ linn_sub2 = subset(data2, 28 < minute & minute <= 34)
 end = subset(data2, 34 < minute)
 
 
-starters_off = mean(colSums(starters[,c(2,4,6,8,10)], na.rm = TRUE))
-linn_sub1_off = mean(colSums(linn_sub1[,c(2,4,6,8,10)], na.rm = TRUE))
-AM_sub_off = mean(colSums(AM_sub[,c(2,4,6,8,10)], na.rm = TRUE))
-jamess_sub_off = mean(colSums(jamess_sub[,c(2,4,6,8,10)], na.rm = TRUE))
-JOAN_sub_off = mean(colSums(JOAN_sub[,c(2,4,6,8,10)], na.rm = TRUE))
-linn_sub2_off = mean(colSums(linn_sub2[,c(2,4,6,8,10)], na.rm = TRUE))
-end_off = mean(colSums(end[,c(2,4,6,8,10)], na.rm = TRUE))
+starters_off = mean(colSums(starters[,off_columns], na.rm = TRUE))
+linn_sub1_off = mean(colSums(linn_sub1[,off_columns], na.rm = TRUE))
+AM_sub_off = mean(colSums(AM_sub[,off_columns], na.rm = TRUE))
+jamess_sub_off = mean(colSums(jamess_sub[,off_columns], na.rm = TRUE))
+JOAN_sub_off = mean(colSums(JOAN_sub[,off_columns], na.rm = TRUE))
+linn_sub2_off = mean(colSums(linn_sub2[,off_columns], na.rm = TRUE))
+end_off = mean(colSums(end[,off_columns], na.rm = TRUE))
 
 barplot(c(starters_off, linn_sub1_off, AM_sub_off, jamess_sub_off, JOAN_sub_off,
           linn_sub2_off, end_off), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Offense by Lineup")
+          "Endgame"), main = "Offense by Lineup", ylab = "Points", xlab = "Lineup")
 
 
 ################################################################################
 #                               DEFENSE BY LINEUP                              #
 ################################################################################
 
-starters_def = mean(colSums(starters[,c(3,5,7,9,11)], na.rm = TRUE))
-linn_sub1_def = mean(colSums(linn_sub1[,c(3,5,7,9,11)], na.rm = TRUE))
-AM_sub_def = mean(colSums(AM_sub[,c(3,5,7,9,11)], na.rm = TRUE))
-jamess_sub_def = mean(colSums(jamess_sub[,c(3,5,7,9,11)], na.rm = TRUE))
-JOAN_sub_def = mean(colSums(JOAN_sub[,c(3,5,7,9,11)], na.rm = TRUE))
-linn_sub2_def = mean(colSums(linn_sub2[,c(3,5,7,9,11)], na.rm = TRUE))
-end_def = mean(colSums(end[,c(3,5,7,9,11)], na.rm = TRUE))
+starters_def = mean(colSums(starters[,def_columns], na.rm = TRUE))
+linn_sub1_def = mean(colSums(linn_sub1[,def_columns], na.rm = TRUE))
+AM_sub_def = mean(colSums(AM_sub[,def_columns], na.rm = TRUE))
+jamess_sub_def = mean(colSums(jamess_sub[,def_columns], na.rm = TRUE))
+JOAN_sub_def = mean(colSums(JOAN_sub[,def_columns], na.rm = TRUE))
+linn_sub2_def = mean(colSums(linn_sub2[,def_columns], na.rm = TRUE))
+end_def = mean(colSums(end[,def_columns], na.rm = TRUE))
 
 barplot(c(starters_def, linn_sub1_def, AM_sub_def, jamess_sub_def, JOAN_sub_def,
           linn_sub2_def, end_def), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Defense by Lineup")
+          "Endgame"), main = "Defense by Lineup", ylab = "Points", xlab = "Lineup")
 
 ################################################################################
 #                               PLUS-MINUS BY LINEUP                           #
@@ -154,4 +217,4 @@ end_pm = end_off - end_def
 barplot(c(starters_pm, linn_sub1_pm, AM_sub_pm, jamess_sub_pm, JOAN_sub_pm,
           linn_sub2_pm, end_pm), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Plus-Minus by Lineup")
+          "Endgame"), main = "Plus-Minus by Lineup", ylab = "Points", xlab = "Lineup")
