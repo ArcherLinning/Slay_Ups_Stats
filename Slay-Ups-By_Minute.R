@@ -170,7 +170,7 @@ JOAN_sub = subset(data2, 22 < minute & minute <= 28)
 linn_sub2 = subset(data2, 28 < minute & minute <= 34)
 end = subset(data2, 34 < minute)
 
-
+# raw
 starters_off = mean(colSums(starters[,off_columns], na.rm = TRUE))
 linn_sub1_off = mean(colSums(linn_sub1[,off_columns], na.rm = TRUE))
 AM_sub_off = mean(colSums(AM_sub[,off_columns], na.rm = TRUE))
@@ -182,13 +182,28 @@ end_off = mean(colSums(end[,off_columns], na.rm = TRUE))
 barplot(c(starters_off, linn_sub1_off, AM_sub_off, jamess_sub_off, JOAN_sub_off,
           linn_sub2_off, end_off), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Offense by Lineup", ylab = "Points", xlab = "Lineup")
+          "Endgame"), main = "Offense by Lineup", ylab = "Average Points", xlab = "Lineup")
+
+# weighted - let 6 be index of 1 (i.e. multiply by 6/(number of minutes))
+starters_off_w = (6/nrow(starters))*mean(colSums(starters[,off_columns], na.rm = TRUE))
+linn_sub1_off_w = (6/nrow(linn_sub1))*mean(colSums(linn_sub1[,off_columns], na.rm = TRUE))
+AM_sub_off_w = (6/nrow(AM_sub))*mean(colSums(AM_sub[,off_columns], na.rm = TRUE))
+jamess_sub_off_w = (6/nrow(jamess_sub))*mean(colSums(jamess_sub[,off_columns], na.rm = TRUE))
+JOAN_sub_off_w = (6/nrow(JOAN_sub))*mean(colSums(JOAN_sub[,off_columns], na.rm = TRUE))
+linn_sub2_off_w = (6/nrow(linn_sub2))*mean(colSums(linn_sub2[,off_columns], na.rm = TRUE))
+end_off_w = (6/nrow(end))*mean(colSums(end[,off_columns], na.rm = TRUE))
+
+barplot(c(starters_off_w, linn_sub1_off_w, AM_sub_off_w, jamess_sub_off_w, JOAN_sub_off_w,
+          linn_sub2_off_w, end_off_w), names.arg = c("Starters", "Linnings Off (1)",
+          "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
+          "Endgame"), main = "Offense by Lineup (Weighted)", ylab = "Weighted Average", xlab = "Lineup")
 
 
 ################################################################################
 #                               DEFENSE BY LINEUP                              #
 ################################################################################
 
+# raw
 starters_def = mean(colSums(starters[,def_columns], na.rm = TRUE))
 linn_sub1_def = mean(colSums(linn_sub1[,def_columns], na.rm = TRUE))
 AM_sub_def = mean(colSums(AM_sub[,def_columns], na.rm = TRUE))
@@ -200,12 +215,27 @@ end_def = mean(colSums(end[,def_columns], na.rm = TRUE))
 barplot(c(starters_def, linn_sub1_def, AM_sub_def, jamess_sub_def, JOAN_sub_def,
           linn_sub2_def, end_def), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Defense by Lineup", ylab = "Points", xlab = "Lineup")
+          "Endgame"), main = "Defense by Lineup", ylab = "Average Points", xlab = "Lineup")
+
+# weighted - let 6 be index of 1 (i.e. multiply by 6/(number of minutes))
+starters_def_w = (6/nrow(starters))*mean(colSums(starters[,def_columns], na.rm = TRUE))
+linn_sub1_def_w = (6/nrow(linn_sub1))*mean(colSums(linn_sub1[,def_columns], na.rm = TRUE))
+AM_sub_def_w = (6/nrow(AM_sub))*mean(colSums(AM_sub[,def_columns], na.rm = TRUE))
+jamess_sub_def_w = (6/nrow(jamess_sub))*mean(colSums(jamess_sub[,def_columns], na.rm = TRUE))
+JOAN_sub_def_w = (6/nrow(JOAN_sub))*mean(colSums(JOAN_sub[,def_columns], na.rm = TRUE))
+linn_sub2_def_w = (6/nrow(linn_sub2))*mean(colSums(linn_sub2[,def_columns], na.rm = TRUE))
+end_def_w = (6/nrow(end))*mean(colSums(end[,def_columns], na.rm = TRUE))
+
+barplot(c(starters_def_w, linn_sub1_def_w, AM_sub_def_w, jamess_sub_def_w, JOAN_sub_def_w,
+          linn_sub2_def_w, end_def_w), names.arg = c("Starters", "Linnings Off (1)",
+          "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
+          "Endgame"), main = "Defense by Lineup (Weighted)", ylab = "Weighted Average", xlab = "Lineup")
 
 ################################################################################
 #                               PLUS-MINUS BY LINEUP                           #
 ################################################################################
 
+# raw
 starters_pm = starters_off - starters_def
 linn_sub1_pm = linn_sub1_off - linn_sub1_def 
 AM_sub_pm = AM_sub_off - AM_sub_def
@@ -214,8 +244,25 @@ JOAN_sub_pm = JOAN_sub_off - JOAN_sub_def
 linn_sub2_pm = linn_sub2_off - linn_sub2_def 
 end_pm = end_off - end_def
 
+par(mfrow = c(1,2))
+
 barplot(c(starters_pm, linn_sub1_pm, AM_sub_pm, jamess_sub_pm, JOAN_sub_pm,
           linn_sub2_pm, end_pm), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Plus-Minus by Lineup", ylab = "Points", xlab = "Lineup",
-          ylim = c(-2,5))
+          "Endgame"), main = "Plus-Minus by Lineup", ylab = "Average Points", xlab = "Lineup",
+          ylim = c(-2,6))
+
+# weighted
+starters_pm_w = starters_off_w - starters_def_w
+linn_sub1_pm_w = linn_sub1_off_w - linn_sub1_def_w
+AM_sub_pm_w = AM_sub_off_w - AM_sub_def_w
+jamess_sub_pm_w = jamess_sub_off_w - jamess_sub_def_w
+JOAN_sub_pm_w = JOAN_sub_off_w - JOAN_sub_def_w
+linn_sub2_pm_w = linn_sub2_off_w - linn_sub2_def_w
+end_pm_w = end_off_w - end_def_w
+
+barplot(c(starters_pm_w, linn_sub1_pm_w, AM_sub_pm_w, jamess_sub_pm_w, JOAN_sub_pm_w,
+          linn_sub2_pm_w, end_pm_w), names.arg = c("Starters", "Linnings Off (1)",
+          "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
+          "Endgame"), main = "Plus-Minus by Lineup (Weighted)", ylab = "Weighted Average", xlab = "Lineup",
+          ylim = c(-2,6))
