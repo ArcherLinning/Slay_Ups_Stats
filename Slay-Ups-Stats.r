@@ -1,5 +1,4 @@
 # set working directory
-
 setwd("C:/Users/linni/OneDrive/Desktop/Personal/Practice_Programming/Slay-Ups-Stats")
 
 # read data
@@ -47,8 +46,9 @@ barplot(qtr_off_means, xlab = "Quarters", ylab = "Points For", names.arg = c("1s
 axis(1, at = c(1,2,3,4))
 axis(2, at = c(0,3,6,9,12,15,18))
 barplot(qtr_def_means, xlab = "Quarters", ylab = "Points Agianst", names.arg = c("1st", "2nd", "3rd", "4th"),
-        col = c("yellow", "blue", "red", "green"), ylim = c(0,12), xaxt = 'n')
+        col = c("yellow", "blue", "red", "green"), ylim = c(0,18), xaxt = 'n', yaxt = 'n')
 axis(1, at = c(1,2,3,4))
+axis(2, at = c(0,3,6,9,12,15,18))
 
 # create matrix of plus-minus by quarter for each game
 

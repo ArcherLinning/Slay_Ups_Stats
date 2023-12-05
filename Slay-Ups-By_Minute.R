@@ -5,30 +5,32 @@ setwd("C:/Users/linni/OneDrive/Desktop/Personal/Practice_Programming/Slay-Ups-St
 data2 = read.csv("Data/Slay-Ups-By_Minute.csv")
 attach(data2)
 
-# offense
+# offense - add new column when new data
 offense = c(game1_off, game2_off, game3_off, game4_off, game5_off, game6_off,
             game7_off, game8_off, game9_off, game10_off, game11_off, game12_off,
             game13_off, game14_off, game15_off, game16_off, game17_off,
             game18_off, game19_off, game20_off, game21_off, game22_off,
-            game23_off, game24_off, game25_off,game26_off, game27_off)
+            game23_off, game24_off, game25_off,game26_off, game27_off, game28_off)
 
-# defense
+# defense - - add new column when new data
 defense = c(game1_def, game2_def, game3_def, game4_def, game5_def, game6_def,
             game7_def, game8_def, game9_def, game10_def, game11_def, game12_def,
             game13_def, game14_def, game15_def, game16_def, game17_def,
             game18_def, game19_def, game20_def, game21_def, game22_def,
-            game23_def, game24_def, game25_def,game26_def, game27_def)
+            game23_def, game24_def, game25_def,game26_def, game27_def, game28_def)
 
 # plus-minus
 pm = offense - defense
 
 # data columns - ADD NEW COLUMNS WHEN NEW DATA AVAILABLE
-off_columns = c(2,4,6,8,10)
-def_columns = c(3,5,7,9,11)
+off_columns = c(2,4,6,8,10,12,14,16,56)
+def_columns = c(3,5,7,9,11,13,15,17,57)
 
 ################################################################################
 #                             Team Output by Minute                            #
 ################################################################################
+
+# plot by minute do not work until all data has been inputted due to missing games #
 
 # by minute offense
 plot(minute, na.omit(offense[1:40]))
@@ -112,7 +114,7 @@ Mitch_off = mean(colSums(Mitch[,off_columns], na.rm = TRUE))
 
 barplot(c(Archer_off, Dan_off, Booker_off, Chapman_off, Anton_off, Joseph_off, Mitch_off),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("red", "red", "lightgreen", "yellow","lightgreen","green",
+        "Mitch"), col = c("yellow", "yellow", "lightgreen", "lightgreen","lightgreen","green",
         "lightgreen"), main = "Offense by Person", ylab = "Points", xlab = "Person")
 
 ################################################################################
@@ -130,7 +132,7 @@ Mitch_def = mean(colSums(Mitch[,def_columns], na.rm = TRUE))
 
 barplot(c(Archer_def,Dan_def, Booker_def, Chapman_def, Anton_def, Joseph_def, Mitch_def),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("green", "green", "red", "lightyellow", "lightyellow",
+        "Mitch"), col = c("green", "green", "red", "lightgreen", "lightyellow",
         "yellow", "yellow"), main = "Defense by Person", ylab = "Points", xlab = "Person")
 
 ################################################################################
@@ -148,12 +150,12 @@ Mitch_pm = Mitch_off - Mitch_def
 
 barplot(c(Archer_pm, Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm, Mitch_pm),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("red", "red", "yellow", "yellow","lightgreen","green",
-        "lightyellow"), main = "Plus-Minus by Person", ylab = "Points", xlab = "Person")
+        "Mitch"), col = c("red", "red", "lightgreen", "lightgreen","lightgreen","green",
+        "lightgreen"), main = "Plus-Minus by Person", ylab = "Points", xlab = "Person")
 
 
 plot(c(1,2,3,4,5,6,7), c(Archer_pm,Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm,
-        Mitch_pm), xaxt = 'n', xlab = "Person", ylab = "Plus-Minus", ylim = c(-1.5,10),
+        Mitch_pm), xaxt = 'n', xlab = "Person", ylab = "Plus-Minus", ylim = c(-5,10),
      pch = 4, main = "Plus-Minus by Person")
 axis(1, at = c(1,2,3,4,5,6,7) , c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
                "Mitch"))
@@ -217,4 +219,5 @@ end_pm = end_off - end_def
 barplot(c(starters_pm, linn_sub1_pm, AM_sub_pm, jamess_sub_pm, JOAN_sub_pm,
           linn_sub2_pm, end_pm), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
-          "Endgame"), main = "Plus-Minus by Lineup", ylab = "Points", xlab = "Lineup")
+          "Endgame"), main = "Plus-Minus by Lineup", ylab = "Points", xlab = "Lineup",
+          ylim = c(-2,5))
