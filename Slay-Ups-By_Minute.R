@@ -23,29 +23,27 @@ defense = c(game1_def, game2_def, game3_def, game4_def, game5_def, game6_def,
 pm = offense - defense
 
 # data columns - ADD NEW COLUMNS WHEN NEW DATA AVAILABLE
-off_columns = c(2,4,6,8,10,12,14,16,56)
-def_columns = c(3,5,7,9,11,13,15,17,57)
+off_columns = c(2,4,6,8,10,12,14,16,24,26,28,56)
+def_columns = c(3,5,7,9,11,13,15,17,25,27,29,57)
 
 ################################################################################
 #                             Team Output by Minute                            #
 ################################################################################
 
-# plot by minute do not work until all data has been inputted due to missing games #
-
 # by minute offense
 plot(minute, na.omit(offense[1:40]))
 for (i in 2:length(off_columns)){
-  points(minute, na.omit(offense[(40*i - 39):(40*i)]))}
+  points(minute, na.pass(offense[(40*i - 39):(40*i)]))}
 
 # by minute defense
 plot(minute, na.omit(defense[1:40]))
 for (i in 2:length(def_columns)){
-  points(minute, na.omit(defense[(40*i - 39):(40*i)]))}
+  points(minute, na.pass(defense[(40*i - 39):(40*i)]))}
 
 # by minute plus-minus
 plot(minute, na.omit(pm[1:40]))
 for (i in 2:length(off_columns)){
-  points(minute, na.omit(pm[(40*i - 39):(40*i)]))}
+  points(minute, na.pass(pm[(40*i - 39):(40*i)]))}
 
 ## Averages ##
 mean_off_minute = rep(0,40)
@@ -132,7 +130,7 @@ Mitch_def = mean(colSums(Mitch[,def_columns], na.rm = TRUE))
 
 barplot(c(Archer_def,Dan_def, Booker_def, Chapman_def, Anton_def, Joseph_def, Mitch_def),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("green", "green", "red", "lightgreen", "lightyellow",
+        "Mitch"), col = c("green", "green", "red", "lightgreen", "lightgreen",
         "yellow", "yellow"), main = "Defense by Person", ylab = "Points", xlab = "Person")
 
 ################################################################################
@@ -150,12 +148,12 @@ Mitch_pm = Mitch_off - Mitch_def
 
 barplot(c(Archer_pm, Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm, Mitch_pm),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("red", "red", "lightgreen", "lightgreen","lightgreen","green",
-        "lightgreen"), main = "Plus-Minus by Person", ylab = "Points", xlab = "Person")
+        "Mitch"), col = c("red", "red", "lightgreen", "yellow","lightgreen","green",
+        "yellow"), main = "Plus-Minus by Person", ylab = "Points", xlab = "Person")
 
 
 plot(c(1,2,3,4,5,6,7), c(Archer_pm,Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm,
-        Mitch_pm), xaxt = 'n', xlab = "Person", ylab = "Plus-Minus", ylim = c(-5,10),
+        Mitch_pm), xaxt = 'n', xlab = "Person", ylab = "Plus-Minus", ylim = c(-1,15),
      pch = 4, main = "Plus-Minus by Person")
 axis(1, at = c(1,2,3,4,5,6,7) , c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
                "Mitch"))
