@@ -26,26 +26,31 @@ defense = c(game1_def, game2_def, game3_def, game4_def, game5_def, game6_def,
 pm = offense - defense
 
 # data columns - ADD NEW COLUMNS WHEN NEW DATA AVAILABLE
-off_columns = c(2,4,6,8,10,12,14,16,24,26,28,30,32,34,56)
-def_columns = c(3,5,7,9,11,13,15,17,25,27,29,31,33,35,57)
+off_columns = c(2,4,6,8,10,12,14,16,24,26,28,30,32,34,36,40,42,44,46,48,50,52,
+                54,56)
+def_columns = c(3,5,7,9,11,13,15,17,25,27,29,31,33,35,37,41,43,45,47,49,51,53,55
+                ,57)
 
 ################################################################################
 #                             Team Output by Minute                            #
 ################################################################################
 
 # by minute offense
-plot(minute, na.omit(offense[1:40]))
-for (i in 2:length(off_columns)){
+plot(minute, na.omit(offense[1:40]), ylim = c(0,16), main = "Offense by Minute",
+     ylab = "Points", xlab = "Minute")
+for (i in 2:28){
   points(minute, na.pass(offense[(40*i - 39):(40*i)]))}
 
 # by minute defense
-plot(minute, na.omit(defense[1:40]))
-for (i in 2:length(def_columns)){
+plot(minute, na.omit(defense[1:40]), ylim = c(0,12), main = "Defense by Minute",
+     ylab = "Points", xlab = "Minute")
+for (i in 2:28){
   points(minute, na.pass(defense[(40*i - 39):(40*i)]))}
 
 # by minute plus-minus
-plot(minute, na.omit(pm[1:40]))
-for (i in 2:length(off_columns)){
+plot(minute, na.omit(pm[1:40]), ylim = c(-7,9), main = "Plus-Minus by Minute",
+     ylab = "Points", xlab = "Minute")
+for (i in 2:28){
   points(minute, na.pass(pm[(40*i - 39):(40*i)]))}
 
 ## Averages ##
@@ -73,7 +78,8 @@ for (l in 1:40){
 
 # plots
 plot(minute, mean_off_minute, col = "green", pch = 3, type = 'b',
-     ylim = c(-2.5, 3.5), ylab = "Average Points", xlab = "Minute")
+     ylim = c(-1, 3.5), ylab = "Average Points", xlab = "Minute",
+     main = "Output by Minute")
 points(minute, mean_def_minute, col = "red", pch = 4)
 points(minute, mean_pm_minute, col = "yellow", pch = 1)
 lines(minute, mean_def_minute, col = "red")
@@ -86,7 +92,12 @@ barplot(mean_pm_minute, names.arg = c('1','2','3','4','5','6','7','8','9','10',
         '11','12','13','14','15','16','17','18','19','20','21','22','23','24',
         '25', '26', '27','28','29','30','31','32','33','34','35','36','37','38',
         '39','40'), main = "Average Plus-Minus by Minute", axis.lty = 1,
-        ylim = c(-2.5,2.5), ylab = "Average Points", xlab = "Minute")
+        ylim = c(-2.5,2.5), ylab = "Average Points", xlab = "Minute",
+        col = c("green","red","black","red","green","green","green","green",
+                "green","green","green","green","red","green","green","green",
+                "green","green","green","green","green","green","red","green",
+                "green","red","green","red","green","red","green","green",
+                "green","red","green","green","green","green","green","green"))
 
 ################################################################################
 #                               Output by person                               #
@@ -114,12 +125,10 @@ Anton_off = mean(colSums(Anton[,off_columns], na.rm = TRUE))
 Joseph_off = mean(colSums(Joseph[,off_columns], na.rm = TRUE))
 Mitch_off = mean(colSums(Mitch[,off_columns], na.rm = TRUE))
 
-par(mfrow = c(1,2))
-
 barplot(c(Archer_off, Dan_off, Booker_off, Chapman_off, Anton_off, Joseph_off,
         Mitch_off), names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton",
-        "Joseph", "Mitch"), col = c("yellow", "yellow", "lightgreen",
-        "lightgreen","lightgreen","green", "lightgreen"), main =
+        "Joseph", "Mitch"), col = c("red", "red", "lightgreen",
+        "orange","greenyellow","green", "yellow"), main =
         "Offense by Person", ylab = "Points", xlab = "Person")
 
 # mean offensive output - weighted (indexed at 28mins)
@@ -137,8 +146,8 @@ Mitch_off_w = (28/nrow(Mitch))*mean(colSums(Mitch[,off_columns], na.rm = TRUE))
 
 barplot(c(Archer_off_w, Dan_off_w, Booker_off_w, Chapman_off_w, Anton_off_w,
         Joseph_off_w, Mitch_off_w), names.arg = c("Archer", "Dan", "Booker",
-        "Chapman", "Anton", "Joseph", "Mitch"), col = c("yellow", "yellow",
-        "lightgreen", "lightgreen","lightgreen","green", "lightgreen"), main =
+        "Chapman", "Anton", "Joseph", "Mitch"), col = c("red", "red",
+        "lightgreen", "orange","greenyellow","green", "yellow"), main =
         "Offense by Person (Weighted)", ylab = "Points", xlab = "Person")
 
 ################################################################################
@@ -157,8 +166,8 @@ Mitch_def = mean(colSums(Mitch[,def_columns], na.rm = TRUE))
 barplot(c(Archer_def,Dan_def, Booker_def, Chapman_def, Anton_def, Joseph_def,
         Mitch_def),
         names.arg = c("Archer", "Dan", "Booker", "Chapman", "Anton", "Joseph",
-        "Mitch"), col = c("green", "green", "red", "lightgreen", "lightgreen",
-        "yellow", "yellow"), main = "Defense by Person", ylab = "Points",
+        "Mitch"), col = c("green", "green", "red", "lightgreen", "yellow",
+        "orange", "greenyellow"), main = "Defense by Person", ylab = "Points",
         xlab = "Person", ylim = c(0,35))
 
 # mean defensive output - weighted (indexed at 28mins)
@@ -178,7 +187,7 @@ Mitch_def_w = (28/nrow(Mitch))*mean(colSums(Mitch[,def_columns], na.rm = TRUE))
 barplot(c(Archer_def_w, Dan_def_w, Booker_def_w, Chapman_def_w, Anton_def_w,
           Joseph_def_w, Mitch_def_w), names.arg = c("Archer", "Dan", "Booker",
           "Chapman", "Anton", "Joseph", "Mitch"), col = c("green", "green",
-          "red", "yellow", "lightgreen", "yellow", "yellow"), main =
+          "red", "lightgreen", "yellow","orange", "greenyellow"), main =
           "Defense by Person (Weighted)", ylab = "Weighted Average Points",
           xlab = "Person", ylim = c(0,35))
 
@@ -197,8 +206,8 @@ Mitch_pm = Mitch_off - Mitch_def
 
 barplot(c(Archer_pm, Dan_pm, Booker_pm, Chapman_pm, Anton_pm, Joseph_pm,
           Mitch_pm), names.arg = c("Archer", "Dan", "Booker", "Chapman",
-          "Anton", "Joseph", "Mitch"), col = c("red", "red", "lightgreen",
-          "yellow","lightgreen","green", "yellow"), main =
+          "Anton", "Joseph", "Mitch"), col = c("yellow", "yellow", "lightgreen",
+          "orange","greenyellow","green", "red"), main =
           "Plus-Minus by Person", ylab = "Points", xlab = "Person")
 
 
@@ -213,8 +222,8 @@ Mitch_pm_w = Mitch_off_w - Mitch_def_w
 
 barplot(c(Archer_pm_w, Dan_pm_w, Booker_pm_w, Chapman_pm_w, Anton_pm_w,
           Joseph_pm_w, Mitch_pm_w), names.arg = c("Archer", "Dan", "Booker",
-          "Chapman", "Anton", "Joseph", "Mitch"), col = c("red", "red",
-          "lightgreen", "yellow","lightgreen","green", "yellow"), main =
+          "Chapman", "Anton", "Joseph", "Mitch"), col = c("yellow", "yellow",
+          "lightgreen","orange","greenyellow","green", "red"), main =
           "Plus-Minus by Person (Weighted)", ylab = "Points", xlab = "Person")
 
 ################################################################################
@@ -242,7 +251,8 @@ barplot(c(starters_off, linn_sub1_off, AM_sub_off, jamess_sub_off, JOAN_sub_off,
           linn_sub2_off, end_off), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
           "Endgame"), main = "Offense by Lineup", ylab = "Average Points",
-          xlab = "Lineup", ylim = c(0,15))
+          xlab = "Lineup", ylim = c(0,15), col = c("red","lightgreen","orange",
+          "yellow3","yellow", "greenyellow", "green"))
 
 # weighted - let 6 be index of 1 (i.e. multiply by 6/(number of minutes))
 starters_off_w = (6/nrow(starters))*mean(colSums(starters[,off_columns],
@@ -263,7 +273,8 @@ barplot(c(starters_off_w, linn_sub1_off_w, AM_sub_off_w, jamess_sub_off_w,
           JOAN_sub_off_w, linn_sub2_off_w, end_off_w), names.arg = c("Starters",
           "Linnings Off (1)", "Anton/Mitch Off", "James' Off", "Jo/Anton Off",
           "Linnings Off (2)", "Endgame"), main = "Offense by Lineup (Weighted)",
-          ylab = "Weighted Average", xlab = "Lineup")
+          ylab = "Weighted Average", xlab = "Lineup", col = c("red","lightgreen",
+          "orange","yellow3","yellow", "greenyellow", "green"))
 
 
 ################################################################################
@@ -283,7 +294,8 @@ barplot(c(starters_def, linn_sub1_def, AM_sub_def, jamess_sub_def, JOAN_sub_def,
           linn_sub2_def, end_def), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
           "Endgame"), main = "Defense by Lineup", ylab = "Average Points",
-          xlab = "Lineup")
+          xlab = "Lineup", col = c("green","yellow3","lightgreen","greenyellow",
+          "yellow","red","orange"))
 
 # weighted - let 6 be index of 1 (i.e. multiply by 6/(number of minutes))
 starters_def_w = (6/nrow(starters))*mean(colSums(starters[,def_columns],
@@ -304,7 +316,8 @@ barplot(c(starters_def_w, linn_sub1_def_w, AM_sub_def_w, jamess_sub_def_w,
           JOAN_sub_def_w, linn_sub2_def_w, end_def_w), names.arg = c("Starters",
           "Linnings Off (1)", "Anton/Mitch Off", "James' Off", "Jo/Anton Off",
           "Linnings Off (2)", "Endgame"), main = "Defense by Lineup (Weighted)",
-          ylab = "Weighted Average", xlab = "Lineup")
+          ylab = "Weighted Average", xlab = "Lineup", col = c("green","yellow3",
+          "lightgreen","greenyellow","yellow","red","orange"))
 
 ################################################################################
 #                               PLUS-MINUS BY LINEUP                           #
@@ -323,7 +336,8 @@ barplot(c(starters_pm, linn_sub1_pm, AM_sub_pm, jamess_sub_pm, JOAN_sub_pm,
           linn_sub2_pm, end_pm), names.arg = c("Starters", "Linnings Off (1)",
           "Anton/Mitch Off", "James' Off", "Jo/Anton Off", "Linnings Off (2)",
           "Endgame"), main = "Plus-Minus by Lineup", ylab = "Average Points",
-          xlab = "Lineup", ylim = c(-2,6))
+          xlab = "Lineup", ylim = c(-2,6), col = c("red","green","greenyellow",
+          "yellow3","orange","yellow","lightgreen"))
 
 # weighted
 starters_pm_w = starters_off_w - starters_def_w
@@ -339,6 +353,7 @@ barplot(c(starters_pm_w, linn_sub1_pm_w, AM_sub_pm_w, jamess_sub_pm_w,
           "Linnings Off (1)", "Anton/Mitch Off", "James' Off", "Jo/Anton Off",
           "Linnings Off (2)", "Endgame"), main = 
           "Plus-Minus by Lineup (Weighted)", ylab = "Weighted Average", xlab =
-          "Lineup", ylim = c(-2,6))
+          "Lineup", ylim = c(-2,6), col = c("red","green","greenyellow",
+          "yellow3","orange","yellow","lightgreen"))
 
 ################################################################################
