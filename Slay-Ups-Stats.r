@@ -79,24 +79,24 @@ for (j in 1:4){
   }
 }
 
-# plot plus minus by quarter
-matplot(c(1,2,3,4), qtr_pm, type = 'p', xlab = "Quarters", pch = 1, col = "black",
-        xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter",
-        ylim = c(-14,24))
-axis(1, at = c(1,2,3,4))
-points(c(1,2,3,4), mean_qtr_pm, col = "blue", pch = 16, type = 'b')
 
 # create average plus-minus by quarter
 mean_qtr_pm = rep(0,4)
 
 for (j in 1:4){
-  qtr_pm[j] = qtr_off_means[j] - qtr_def_means[j]
+  mean_qtr_pm[j] = qtr_off_means[j] - qtr_def_means[j]
 }
 
 # plot plus minus by quarter
-par(mfrow = c(1,2))
-plot(qtr_pm, type = 'b', xlab = "Quarters", pch = 1, col = "black",
-     xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter")
+matplot(c(1,2,3,4), qtr_pm, type = 'p', xlab = "Quarters", pch = 1, col = "black",
+        xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter",
+        ylim = c(-14,24))
+axis(1, at = c(1,2,3,4))
+points(c(1,2,3,4), mean_qtr_pm, col = "blue", pch = 16, type = 'p')
+
+# plot plus minus by quarter
+plot(mean_qtr_pm, type = 'b', xlab = "Quarters", pch = 1, col = "black",
+     xaxt = 'n', ylab = "Plus-Minus", main = "Average Plus-Minus by Quarter")
 axis(1, at = c(1,2,3,4))
 
 
