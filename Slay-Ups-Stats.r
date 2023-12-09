@@ -11,11 +11,24 @@ summary(data)
 library("car")
 
 # scatter of points diff by number of fouls given the result
-scatterplot(points_diff ~ fouls | result, data = data, xaxt = 'n', yaxt = 'n', legend = FALSE, 
-            col = c("red", 'blue'))
-legend("bottomleft", c("W", "L"), pch = c(2, 1), col = c("blue", 'red'))
+scatterplot(points_diff ~ fouls | result, data = data, xaxt = 'n', yaxt = 'n',
+            legend = FALSE, col = c("red", 'green'), xlab = "Fouls",
+            ylab = "Points Differential", main = "Points Differential vs. Fouls",
+            pch = c(4,3), smooth = FALSE)
+legend("topright", c("L", "W"), pch = c(4,3), col = c("red", 'green'), cex = 1,
+       bty = 'o', x.intersp = 0.4, y.intersp = 0.2)
 axis(1, at = c(4,6,8,10,12,14,16))
 axis(2, at = c(-15,0,15,30,45,60))
+
+win = subset(data, result == "W")
+win_fouls_mean = mean(win$fouls, na.rm = TRUE)
+
+loss = subset(data, result == "L")
+loss_fouls_mean = mean(loss$fouls, na.rm = TRUE)
+
+barplot(c(win_fouls_mean, loss_fouls_mean), names.arg = c("Win", "Loss"),
+        main = "Average Fouls for Wins and Losses", xlab = "Result",
+        ylab = "Average Number of Fouls", col = c("green", "red"))
 
 ################################################################################
 #                    By quarter analysis - All Season                          #
@@ -35,20 +48,27 @@ for (i in 1:4){
 }
 
 # plot mean points per quarter
-plot(qtr_off_means, type = "b", xlab = "Quarters", xaxt = "n", ylab = "Average Points", col = "blue", ylim = c(8,17))
+plot(qtr_off_means, type = "b", xlab = "Quarters", xaxt = "n",
+     ylab = "Average Points", col = "green", ylim = c(8,17),
+     main = "Average Points Scored For and Against by Quarter")
 points(qtr_def_means, type = "b", col = "red")
 axis(1, at = c(1,2,3,4))
-legend("topleft", c("Points For", "Points Against"), col = c("blue", "red"), lty = 1)
+legend("topleft", c("Points For", "Points Against"), col = c("green", "red"),
+       lty = 1, bty = 'n', x.intersp = 0.4, y.intersp = 0.2)
 
 par(mfrow = c(1,2))
-barplot(qtr_off_means, xlab = "Quarters", ylab = "Points For", names.arg = c("1st", "2nd", "3rd", "4th"),
-        col = c("yellow", "blue", "red", "green"), ylim = c(0,18), yaxt = 'n', xaxt = 'n')
+barplot(qtr_off_means, xlab = "Quarters", ylab = "Points For", names.arg =
+        c("1st", "2nd", "3rd", "4th"), col = c("yellow", "blue", "red",
+        "green"), ylim = c(0,18), yaxt = 'n', xaxt = 'n',
+        main = "Average Points Scored For by Quarter")
 axis(1, at = c(1,2,3,4))
 axis(2, at = c(0,3,6,9,12,15,18))
-barplot(qtr_def_means, xlab = "Quarters", ylab = "Points Agianst", names.arg = c("1st", "2nd", "3rd", "4th"),
-        col = c("yellow", "blue", "red", "green"), ylim = c(0,18), xaxt = 'n', yaxt = 'n')
+barplot(qtr_def_means, xlab = "Quarters", ylab = "Points Against", names.arg =
+        c("1st", "2nd", "3rd", "4th"), col = c("yellow", "blue", "red",
+        "green"), ylim = c(0,12), xaxt = 'n', yaxt = 'n',
+        main = "Average Points Scored Against by Quarter")
 axis(1, at = c(1,2,3,4))
-axis(2, at = c(0,3,6,9,12,15,18))
+axis(2, at = c(0,2,4,6,8,10,12))
 
 # create matrix of plus-minus by quarter for each game
 
@@ -66,10 +86,11 @@ for (j in 1:4){
 
 # plot plus minus by quarter
 par(mfrow = c(1,2))
-matplot(c(1,2,3,4), qtr_pm, type = 'p', xlab = "Quarters", pch = 1, col = "black", xaxt = 'n', ylab = "Plus-Minus")
+matplot(c(1,2,3,4), qtr_pm, type = 'p', xlab = "Quarters", pch = 1, col = "black",
+        xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter")
 axis(1, at = c(1,2,3,4))
 
-# create averaeg plus-minus by quarter
+# create average plus-minus by quarter
 mean_qtr_pm = rep(0, 4)
 
 for (l in 1:4){
@@ -81,7 +102,8 @@ for (l in 1:4){
 }
 
 # plot average plus-minus per quarter
-plot(mean_qtr_pm, type = "b", xlab = "Quarters", xaxt = "n", ylab = "Plus-Minus")
+plot(mean_qtr_pm, type = "b", xlab = "Quarters", xaxt = "n", ylab = "Plus-Minus",
+     main = "Average Plus-Minus by Quarter")
 axis(1, at = c(1,2,3,4))
 
 
@@ -116,7 +138,7 @@ summary(secondqtr_model)
 thirdqtr_model = lm(result_binary ~ qtr3_for + qtr3_against, data = data)
 summary(thirdqtr_model)
 
-forthqtr_model = lm(result_binary ~ qtr4_for + qtr4_against, data = data)
+fourthqtr_model = lm(result_binary ~ qtr4_for + qtr4_against, data = data)
 summary(forthqtr_model)
 
 best_model = lm(result_binary ~ qtr2_against + qtr3_against + fouls, data = data)
