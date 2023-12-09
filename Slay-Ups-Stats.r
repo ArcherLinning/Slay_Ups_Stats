@@ -99,6 +99,16 @@ plot(mean_qtr_pm, type = 'b', xlab = "Quarters", pch = 1, col = "black",
      xaxt = 'n', ylab = "Plus-Minus", main = "Average Plus-Minus by Quarter")
 axis(1, at = c(1,2,3,4))
 
+# variance
+pm_var = rep(0,4)
+for (l in 1:4){
+  pm_var[l] = var(qtr_pm[l,], na.rm = TRUE)
+}
+
+boxplot(qtr_pm[1,],qtr_pm[2,],qtr_pm[3,],qtr_pm[4,],
+        main = "Plus-Minus Range by Quarter", xlab = "Quarter", ylab = "Points",
+        col = c("yellow", "blue", "red", "green"))
+
 
 ################################################################################
 #                             Predictive Modelling                            #
