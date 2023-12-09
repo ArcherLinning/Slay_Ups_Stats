@@ -35,17 +35,12 @@ barplot(c(win_fouls_mean, loss_fouls_mean), names.arg = c("Win", "Loss"),
 ################################################################################
 
 # create empty vectors
-qtr_off_means = rep(0,4)
-qtr_def_means = rep(0,4)
+qtr_off_means = c(mean(qtr1_for, na.rm = TRUE),mean(qtr2_for, na.rm = TRUE),
+                  mean(qtr3_for, na.rm = TRUE), mean(qtr4_for, na.rm = TRUE))
+qtr_def_means = c(mean(qtr1_against, na.rm = TRUE),mean(qtr2_against,
+                  na.rm = TRUE), mean(qtr3_against, na.rm = TRUE),
+                  mean(qtr4_against, na.rm = TRUE))
 
-# create average points by quarter 
-for (i in 1:4){
-  qtr_for = c(qtr1_for, qtr2_for, qtr3_for, qtr4_for)
-  qtr_against = c(qtr1_against, qtr2_against, qtr3_against, qtr4_against)
-    
-  qtr_off_means[i] = mean(qtr_for[(27*i-26):(27*i)], na.rm = TRUE)
-  qtr_def_means[i] = mean(qtr_against[(27*i-26):(27*i)], na.rm = TRUE)
-}
 
 # plot mean points per quarter
 plot(qtr_off_means, type = "b", xlab = "Quarters", xaxt = "n",
@@ -72,38 +67,36 @@ axis(2, at = c(0,2,4,6,8,10,12))
 
 # create matrix of plus-minus by quarter for each game
 
-qtr_pm = matrix(0, nrow = 4, ncol = 27)
+qtr_pm = matrix(0, nrow = 4, ncol = length(game))
 
 for (j in 1:4){
-  for (k in 1:27){
+  for (k in 1:length(game)){
     qtr_for = c(qtr1_for, qtr2_for, qtr3_for, qtr4_for)
     
     qtr_against = c(qtr1_against, qtr2_against, qtr3_against, qtr4_against)
     
-    qtr_pm[j,k] = qtr_for[27*j - 27 + k] - qtr_against[27*j - 27 + k]
+    qtr_pm[j,k] = qtr_for[length(game)*(j-1)+k]-qtr_against[length(game)*(j-1)+k]
   }
 }
 
 # plot plus minus by quarter
-par(mfrow = c(1,2))
 matplot(c(1,2,3,4), qtr_pm, type = 'p', xlab = "Quarters", pch = 1, col = "black",
-        xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter")
+        xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter",
+        ylim = c(-14,24))
 axis(1, at = c(1,2,3,4))
+points(c(1,2,3,4), mean_qtr_pm, col = "blue", pch = 16, type = 'b')
 
 # create average plus-minus by quarter
-mean_qtr_pm = rep(0, 4)
+mean_qtr_pm = rep(0,4)
 
-for (l in 1:4){
-  qtr_for = c(qtr1_for, qtr2_for, qtr3_for, qtr4_for)
-  qtr_against = c(qtr1_against, qtr2_against, qtr3_against, qtr4_against)
-
-  
-  mean_qtr_pm[l] = mean(qtr_pm[l,], na.rm = TRUE)
+for (j in 1:4){
+  qtr_pm[j] = qtr_off_means[j] - qtr_def_means[j]
 }
 
-# plot average plus-minus per quarter
-plot(mean_qtr_pm, type = "b", xlab = "Quarters", xaxt = "n", ylab = "Plus-Minus",
-     main = "Average Plus-Minus by Quarter")
+# plot plus minus by quarter
+par(mfrow = c(1,2))
+plot(qtr_pm, type = 'b', xlab = "Quarters", pch = 1, col = "black",
+     xaxt = 'n', ylab = "Plus-Minus", main = "Plus-Minus by Quarter")
 axis(1, at = c(1,2,3,4))
 
 
